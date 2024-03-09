@@ -1,19 +1,29 @@
 from bs4 import BeautifulSoup
 import requests, csv
 
-z = 'Zweihander'
+urlItem = 'https://rankedboost.com/elden-ring/weapons/'
+pageItem = requests.get(urlItem)
 
-"url = 'https://eldenring.wiki.fextralife.com/' + z"
-url = 'https://rankedboost.com/elden-ring/weapons/'
-page = requests.get(url)
+soupItem = BeautifulSoup(pageItem.text, 'html.parser').find_all('div', class_ = 'tier-list-object-name-table-css')[::2]
 
-soup = BeautifulSoup(page.text, 'html.parser').find_all('div', class_ = 'tier-list-object-name-table-css')
+for i in range(len(soupItem)):
+    urlDescription = 'https://eldenring.wiki.fextralife.com/' + soupItem[i].get_text().strip()
+    print(urlDescription)
+    pageDescription = requests.get(urlDescription)
+    soupDescription = BeautifulSoup(pageDescription.text, 'html.parser').find_all('em')
 
-"info = [needed_info.get_text() for needed_info in soup]"
-
-print(soup[0].get_text())
+    with open('eldendata.csv', 'a+', newline='') as data:
+        for i in range(len(soupDescription)):
+            data.write(soupDescription[i].get_text())
+            data.write('\n')
 
 """
+#Code For getting item names#
+
+url = 'https://rankedboost.com/elden-ring/weapons/'
+page = requests.get(url)
+soup = BeautifulSoup(page.text, 'html.parser').find_all('div', class_ = 'tier-list-object-name-table-css')[::2]
+
 with open('weapons.csv', 'w', newline='') as data:
     for i in range(len(soup)):
         data.write(soup[i].get_text())
