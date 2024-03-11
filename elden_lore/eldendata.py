@@ -1,8 +1,10 @@
 from bs4 import BeautifulSoup
 import requests, csv
 
+
 #Code for getting descriptions from items#
 """
+
 urlItem = 'https://rankedboost.com/elden-ring/weapons/'
 pageItem = requests.get(urlItem)
 soupItem = BeautifulSoup(pageItem.text, 'html.parser').find_all('div', class_ = 'tier-list-object-name-table-css')[::2]
@@ -15,14 +17,15 @@ for i in range(len(soupItem)):
 
     with open('eldendata.csv', 'a+', newline='') as data:
         data.write('\n')
+        data.write(soupItem[i].get_text() + ': ')
         for i in range(len(soupDescription)):
             if soupDescription[i].get_text() != 'Int':
                 data.write(soupDescription[i].get_text())
                 data.write('\n')
 
 """
-"""
 #Code for getting item names#
+"""
 
 url = 'https://rankedboost.com/elden-ring/weapons/'
 page = requests.get(url)
